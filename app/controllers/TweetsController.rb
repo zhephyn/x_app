@@ -5,27 +5,41 @@ class TweetsController < ApplicationController
     end
 
     def index
+        @tweets = Tweet.all
     end
 
     def show
     end
 
     def new
+        @tweet = Tweet.new
     end
+
+    def create
+        @tweet = Tweet.new(tweet_params)
+        @tweet.save
+    end 
 
     def edit
+        @tweet = Tweet.update
     end
 
-    def updated
+    def update
+        @tweet = Tweet.update(tweet_params)
+        @tweet.save
     end
 
     def destroy
+        @tweet = Tweet.destroy
+        redirect_to tweets_path
     end
 
     private
     def tweet_params
+        params.require(tweet).permit(:body)
     end
     
     def set_post
+        @tweet = Tweet.find(params[:id])
     end
 end
