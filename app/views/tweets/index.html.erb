@@ -1,2 +1,4 @@
-same as profile
-all posts by user show up here
+<h1>User Profile page</h1>
+<% @tweets.each do |tweet| %>
+    <%= tweet.body %>
+<% end %>
