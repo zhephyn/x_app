@@ -1,6 +1,6 @@
 class TweetsController < ApplicationController
-    before_action :authenticate_user! for all actions
-    before_action :set_post for show, edit,update and destroy actions
+    #before_action :authenticate_user! for all actions
+    #before_action :set_post for show,update,edit and destroy
     def home
     end
 
