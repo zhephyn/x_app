@@ -1,4 +1,14 @@
-<h1>User Profile page</h1>
+<h1>Feed for showing  tweets created by all users</h1>
+<div>
 <% @tweets.each do |tweet| %>
-    <%= tweet.body %>
+    <div>
+        <%= tweet.body %>
+        <%= link_to "Show this tweet", tweet_path(tweet), method: :get %>
+    </div>
 <% end %>
+</div>
+<div>
+    <% if user_signed_in? %>
+        <%= button_to "Log out", destroy_user_session_path, method: :delete %>
+    <% end %>
+</div>

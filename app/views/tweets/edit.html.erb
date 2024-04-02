@@ -1,5 +1,5 @@
 <h1>Form for editing tweet</h1>
-<%= form_with model: @tweet do |form| %>
+<%= form_with model: [@user,@tweet] do |form| %>
     <%= form.label :body %>
     <%= form.text_area :body %>
     <%= form.submit "Update tweet" %>

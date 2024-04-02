@@ -1,5 +1,8 @@
-<h1>Page for shwoing individual tweet</h1>
+<h1>Page for showing individual tweet</h1>
 <div>
-    <p>Body:</p>
+    <p> User number <b><%= @tweet.user_id %></b> said:</p>
+    <p><b><em>Body:</em></b></p>
     <%= @tweet.body %>
-</div>
+    <%= link_to "Edit this tweet", edit_tweet_path, method: :get %>
+    <%= button_to "Delete this tweet", tweet_path, method: :delete %>
+</div> 
