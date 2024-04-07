@@ -1,9 +1,15 @@
 <header>
-    <% current_user.username %>
-    <%= @profile.bio %>
-    <%= @profile.location %>
-    <%= @profile.website %>
+    <div>
+        <h1><% @profile.user.username %></h1>
+        <%= @profile.bio %>
+        <%= @profile.location %>
+        <%= @profile.website %>
+    </div>
 </header>
 <body>
-    
+    <div>
+        <% @tweets.each do |tweet| %>
+            <%= tweet.body %>
+        <% end %>
+    </div> 
 </body>

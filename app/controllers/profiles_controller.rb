@@ -8,6 +8,8 @@ class ProfilesController < ApplicationController
     def show
         #find a profile of any user whether they are signed in or not
         @profile = Profile.find(params[:id])
+        @user = User.find(params[:id])
+        @tweets = @user.tweets
     end
 
     def new

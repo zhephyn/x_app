@@ -1,0 +1,9 @@
+<%= form_with model: @profile each do |form| %>
+    <%= form.label :bio %>
+    <% form.text_area :bio %>
+    <%= form.label :website %>
+    <%= form.text :website %>
+    <%= form.label :location %>
+    <%= form.text :location %>
+    <%= form.submit  "Create Profile" %>
+<% end %>
