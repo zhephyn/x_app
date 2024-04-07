@@ -1,9 +1,10 @@
-<%= form_with model: @profile each do |form| %>
+<h1>Create your profile by filling in the details below</h1>
+<%= form_with model: @profile do |form| %>
     <%= form.label :bio %>
     <% form.text_area :bio %>
     <%= form.label :website %>
-    <%= form.text :website %>
+    <%= form.text_field :website %>
     <%= form.label :location %>
-    <%= form.text :location %>
+    <%= form.text_field :location %>
     <%= form.submit  "Create Profile" %>
 <% end %>

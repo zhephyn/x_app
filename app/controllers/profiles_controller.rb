@@ -29,7 +29,7 @@ class ProfilesController < ApplicationController
         if current_user.id == @profile.user_id
             render :edit
         else
-            redirect_to :root, alert: "You are not authorised to edit this profile"
+            redirect_to :root
         end
     end
 
@@ -41,7 +41,7 @@ class ProfilesController < ApplicationController
             @profile.save
             redirect_to profile_path(@profile), notice: "Profile was successfully updated"
         else
-            redirect_to :root, alert "You are not authorised to edit this profile"
+            redirect_to :root, alert: "You are not authorised to edit this profile"
         end
     end
 

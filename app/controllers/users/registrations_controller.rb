@@ -50,7 +50,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     devise_parameter_sanitizer.permit(:account_update, keys: [:username, :email, :password, :password_confirmation, :current_password])
    end
 
-  # The path used after sign up.
+  # The path used after sign up
    def after_sign_up_path_for(resource)
      new_profile_path
    end
