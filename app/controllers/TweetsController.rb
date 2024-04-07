@@ -18,6 +18,7 @@ class TweetsController < ApplicationController
     def show
         if user_signed_in?
             @tweet = Tweet.find(params[:id])
+            @username = @tweet.user.username
         else
             ##render a page for the user to sign in or register first
         end
