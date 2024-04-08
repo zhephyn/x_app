@@ -1,3 +1,4 @@
 <% @profiles.each do |profile| %>
     <%= profile.user.username %>
+    <%= link_to "View Profile", profile_path(profile)%>
 <% end %>

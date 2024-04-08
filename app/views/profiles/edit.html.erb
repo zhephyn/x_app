@@ -1,9 +1,23 @@
 <%= form_with model:[@user, @profile] do |form| %>
-    <%= form.label :bio %>
-    <% form.text_area :bio %>
-    <%= form.label :website %>
-    <%= form.text_field :website %>
-    <%= form.label :location %>
-    <%= form.text_field :location %>
-    <%= form.submit  "Create Profile" %>
+    <div>
+        <%= form.label :bio %>
+        <% form.text_area :bio %>
+    </div>
+    <div>
+        <%= form.label :website %>
+        <%= form.text_field :website %>
+    </div>
+    <div>
+        <%= form.label :location %>
+        <%= form.text_field :location %>
+    </div>
+    <div>
+        <%= form.file_field :profile_photo %>
+    </div>
+    <div>
+        <%= form.file_field :cover_photo %>
+    </div>
+    <div>
+        <%= form.submit  "Create Profile" %>
+    </div>
 <% end %>

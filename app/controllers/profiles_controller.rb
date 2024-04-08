@@ -14,9 +14,10 @@ class ProfilesController < ApplicationController
         if current_user.profile.nil?
             @profile = current_user.build_profile
         else
-            redirect_to tweets_path, notice: "You already have a profile"
+            render :edit
         end
     end
+
 
     def create
         if current_user.profile.nil?
@@ -27,7 +28,7 @@ class ProfilesController < ApplicationController
                     render :new
                 end
         else
-            redirect_to tweets_path, notice: "You already have a profile"
+            render :edit
         end
     end
 
@@ -51,7 +52,6 @@ class ProfilesController < ApplicationController
     end
 
     def destroy
-        #current user should own the profile if not, they cant delete the profile
         @profile = Profile.find(params[:id])
         if current_user.id == @profile.user_id
             @profile.destroy
@@ -60,8 +60,8 @@ class ProfilesController < ApplicationController
     end
 
     private
-    #add method to be used as a callback to build a user profile at the signup stage when they create an account
+    
     def profile_params
-        params.require(:profile).permit(:bio, :location, :website)
+        params.require(:profile).permit(:bio, :location, :website, :profile_photo, :cover_photo)
     end
 end

@@ -9,11 +9,8 @@ class TweetsController < ApplicationController
         if user_signed_in?
             @tweets = Tweet.all
         else
-            #render a signin or registration form for them to create an account
+            redirect_to :root, notice: "You need to sign in or create an account with us to view tweets"
         end 
-        #should be nicknamed profile, use devise helper called current_user, current_user should be used with other actions too
-        #@user = current_user
-        #@tweets = @user.tweets
     end
     def show
         if user_signed_in?
@@ -22,9 +19,6 @@ class TweetsController < ApplicationController
         else
             ##render a page for the user to sign in or register first
         end
-        #the lines below are commented because any on should be able to see the tweet regardless if they created it or not
-        #@user = current_user
-        #@tweet = @user.tweets.find(params[:id])
     end
 
     def new
@@ -44,9 +38,6 @@ class TweetsController < ApplicationController
     end 
 
     def edit
-        #find tweet
-        #check to see if the user who wants to edit is the same user that made the tweet
-        #edit the tweet
         @tweet = Tweet.find(params[:id])
         if current_user.id == @tweet.user_id
             render :edit
@@ -77,7 +68,6 @@ class TweetsController < ApplicationController
     end
 
     private
-    ##for params, other parameters include a location for each tweet, images/image attachments
     def tweet_params
         params.require(:tweet).permit(:body)
     end
