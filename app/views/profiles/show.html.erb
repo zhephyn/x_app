@@ -2,6 +2,20 @@
     <div>
         <h1><%= @profile.user.username %></h1>
         <div>
+            <div>
+            <p>Profile Photo:</p>
+            <% if @profile.profile_photo.attached? %>
+                <%= image_tag(@profile.profile_photo) %>
+            <% end %>
+            </div>
+            <div>
+            <p>Cover Photo:</p>
+            <% if @profile.cover_photo.attached? %>
+                <%= image_tag(@profile.cover_photo) %>
+            <% end %>
+            </div>
+        </div>
+        <div>
             <p>Bio:<%= @profile.bio %></p>
         </div>
         <div>
@@ -18,7 +32,9 @@
         <% @profile.user.tweets.each do |tweet| %>
             <div>
             <%= tweet.body %>
+            <%= link_to "View tweet", tweet_path(tweet)%>
             </div>
         <% end %>
+        <%= link_to "Create new tweet", new_tweet_path %>
     </div> 
 </body>

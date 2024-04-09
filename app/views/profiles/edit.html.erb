@@ -1,7 +1,8 @@
-<%= form_with model:[@user, @profile] do |form| %>
+<h1>Edit your Profile</h1>
+<%= form_with model: @profile do |form| %>
     <div>
         <%= form.label :bio %>
-        <% form.text_area :bio %>
+        <%= form.text_area :bio %>
     </div>
     <div>
         <%= form.label :website %>
@@ -12,12 +13,12 @@
         <%= form.text_field :location %>
     </div>
     <div>
-        <%= form.file_field :profile_photo %>
+        <p>Profile Photo:<%= form.file_field :profile_photo %></p>
     </div>
     <div>
-        <%= form.file_field :cover_photo %>
+        <p>Cover Photo:<%= form.file_field :cover_photo %></p>
     </div>
     <div>
-        <%= form.submit  "Create Profile" %>
+        <%= form.submit  "Update Profile" %>
     </div>
 <% end %>

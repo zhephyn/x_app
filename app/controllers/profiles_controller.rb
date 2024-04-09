@@ -6,15 +6,14 @@ class ProfilesController < ApplicationController
 
     def show
         @profile = Profile.find(params[:id])
-        @user = User.find(params[:id])
-        @tweets = @user.tweets
     end
 
     def new
+        @profile = current_user.profile
         if current_user.profile.nil?
             @profile = current_user.build_profile
         else
-            render :edit
+            redirect_to edit_profile_path(@profile), notice: "You cant create a new profile, edit your existing profile instead"
         end
     end
 
@@ -34,20 +33,23 @@ class ProfilesController < ApplicationController
 
     def edit
         @profile = Profile.find(params[:id])
-        if current_user.id == @profile.user_id
+        @user = current_user
+        if @profile.user_id == @user.id
             render :edit
         else
-            redirect_to tweets_path , alert: "You are not authorised to edit this profile"
+            redirect_to new_profile_path, notice: "Can't edit profile, create one instead"
         end
     end
 
     def update
         @profile = Profile.find(params[:id])
-        if current_user.id == @profile.user_id
+        @user = current_user
+        if @profile.user_id == @user.id
+            ##line above could be made better by the find_by method
             @profile.update(profile_params)
             redirect_to profile_path(@profile), notice: "Profile was successfully updated"
         else
-            redirect_to tweets_path, alert: "You are not authorised to edit this profile"
+            redirect_to new_profile_path, notice: "Can't edit profile, create one instead"
         end
     end
 

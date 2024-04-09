@@ -61,7 +61,7 @@ class TweetsController < ApplicationController
         @tweet = Tweet.find(params[:id])
         if current_user.id == @tweet.user_id
             @tweet.destroy
-            redirect_to tweets_path
+            redirect_to tweets_path, notice: "Tweet was successfully deleted"
         else
             redirect_to :root
         end
