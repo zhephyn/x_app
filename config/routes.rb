@@ -1,9 +1,14 @@
 Rails.application.routes.draw do
-  get 'relationships/create'
-  get 'relationships/destroy'
+  get 'users/following'
+  get 'users/followers'
+  post "relationships/create", to: "relationships#create", as: :create_relationship
+  delete "relationships/destroy", to: "relationships#destroy", as: :destroy_relationship
   devise_for :users, controllers: { registrations: "users/registrations"}
   resources :profiles
+
   resources :relationships
+  resources :tweets
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -12,6 +17,10 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "tweets#home"
-  resources :tweets
+ resources :users do
+  member do
+    get :following, :followers
+  end
+ end
   
 end

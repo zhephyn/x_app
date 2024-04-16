@@ -2,6 +2,7 @@
 <div>
 <% @tweets.each do |tweet| %>
     <div>
+        <b><%= tweet.user.username %></b> 
         <%= tweet.body %>
         <%= link_to "Show this tweet", tweet_path(tweet), method: :get %>
     </div>
@@ -12,3 +13,4 @@
         <%= button_to "Log out", destroy_user_session_path, method: :delete %>
     <% end %>
 </div>
+<%= link_to "View User Profiles", profiles_path, method: :get %>

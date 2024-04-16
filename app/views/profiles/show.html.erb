@@ -1,6 +1,21 @@
 <header>
     <div>
+        <div>
+            <% if current_user != @profile_owner %>
+                <% if current_user.following?(@profile_owner)%>
+                    <% relationship = current_user.relationship_with(@profile_owner)%>
+                    <%= button_to "Unfollow User", destroy_relationship_path, method: :delete, params: {id: relationship.id, followed_id: @profile_owner.id} %>
+                <% else %>
+                    <%= button_to "Follow User", create_relationship_path, method: :post, params: {followed_id: @profile_owner.id} %>
+                <% end %>
+            <% end %>
+        </div>
+
         <h1><%= @profile.user.username %></h1>
+        <div>
+            <div><%=@profile.user.followers.count%><p> <%= link_to "Followers",followers_user_path(@profile.user), method: :get %></p></div>
+            <div><%=@profile.user.following.count%><p> <%= link_to "Following", following_user_path(@profile.user), method: :get %></p></div>
+        </div>
         <div>
             <div>
             <p>Profile Photo:</p>
@@ -37,4 +52,7 @@
         <% end %>
         <%= link_to "Create new tweet", new_tweet_path %>
     </div> 
+    <% if user_signed_in? %>
+        <%= button_to "Log out", destroy_user_session_path, method: :delete %>
+    <% end %>
 </body>

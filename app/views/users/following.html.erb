@@ -1,0 +1,4 @@
+<h3><%= @user.username %> is following:</h3>
+<% @following.each do |user_following| %>
+   <b> <%= user_following.username %></b>
+<% end %>
