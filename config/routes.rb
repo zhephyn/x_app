@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  get 'comments/show'
+  get 'comments/new'
+  get 'comments/create'
+  get 'comments/destroy'
   get 'users/following'
   get 'users/followers'
   post "relationships/create", to: "relationships#create", as: :create_relationship
