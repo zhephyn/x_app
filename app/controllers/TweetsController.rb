@@ -66,7 +66,18 @@ class TweetsController < ApplicationController
             redirect_to :root
         end
     end
-
+    ##methods for retweeting and quoting a tweet
+    def retweet
+        @tweet = Tweet.find(params[:id])
+        @retweet = current_user.tweets.new(tweet_id: @tweet.id)
+        if @retweet.save
+            redirect_to tweet_path(@tweet), notice: "Successfully retweeted Tweet"
+        end
+    end
+    
+    def quote_tweet
+    end
+    
     private
     def tweet_params
         params.require(:tweet).permit(:body)
