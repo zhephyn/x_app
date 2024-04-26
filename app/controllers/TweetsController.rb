@@ -67,6 +67,7 @@ class TweetsController < ApplicationController
         end
     end
     ##methods for retweeting and quoting a tweet
+    
     def retweet
         @tweet = Tweet.find(params[:id])
         @retweet = current_user.tweets.new(tweet_id: @tweet.id)
