@@ -76,6 +76,17 @@
             </div>
         <% end %>
     <% end %>
+    <h3>Qoute tweets</h3>
+    <% if @profile.user.quotes.any? %>
+        <% @profile.user.quotes.each do |quote| %>
+            <b><em><%= quote.user.username %></em></b>
+            <b><em><%= quote.body %></em></b>
+            <div>
+                <%= quote.tweet.user.username %>
+                <%= quote.tweet.body%>
+            </div>
+        <% end %>
+    <% end %>
     <% if user_signed_in? %>
         <%= button_to "Log out", destroy_user_session_path, method: :delete %>
     <% end %>

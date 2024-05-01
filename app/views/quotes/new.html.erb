@@ -1,0 +1,6 @@
+<p>Create Quote for this tweet</p>
+<%= form_with(model:[@tweet,@quote] , url: quote_tweet_tweet_path(@tweet))  do |form| %>
+    <%= form.label :body %>
+    <%= form.text_area :body %>
+    <%= form.submit "Create Quote Tweet" %>
+<% end %>

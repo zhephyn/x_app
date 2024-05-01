@@ -17,6 +17,11 @@ Rails.application.routes.draw do
       post :retweet, to: "retweets#retweet", as: :retweet_tweet
       get :retweet
     end
+
+    member do 
+      get :new, to: "quotes#new", as: :new_quote
+      post :quote, to: "quotes#quote", as: :quote_tweet
+    end
   end
   
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

@@ -9,6 +9,7 @@
         <%= button_to retweet_tweet_path(tweet), method: :post do %>
             <%= image_tag("retweet-icon.svg", class: "inline-block h-6 w-6 hover:fill-blue-500") %>
         <% end %>
+        <%= link_to "Quote Tweet", new_quote_tweet_path(tweet), method: :get %>
     </div>
 <% end %>
 </div>
