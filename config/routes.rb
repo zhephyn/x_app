@@ -19,7 +19,7 @@ Rails.application.routes.draw do
     end
 
     member do 
-      get :new, to: "quotes#new", as: :new_quote
+      get :new_quote, to: "quotes#new_quote", as: :new_quote
       post :quote, to: "quotes#quote", as: :quote_tweet
     end
   end

@@ -1,5 +1,5 @@
 class QuotesController < ApplicationController
-    def new
+    def new_quote
         @tweet = Tweet.find(params[:id])
         @quote = current_user.quotes.new
     end
