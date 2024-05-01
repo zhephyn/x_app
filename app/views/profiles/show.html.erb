@@ -52,6 +52,30 @@
         <% end %>
         <%= link_to "Create new tweet", new_tweet_path %>
     </div> 
+    <h3>Retweets</h3>
+    <% if @profile.user.id == current_user.id %>
+        <% if current_user.retweets.any?%>
+            <div>
+                <% current_user.retweets.each do |retweet| %>
+                    <p>You Retweeted</p>
+                    <%= image_tag("retweet-icon.svg", class: "inline-block h-6 w-6 hover:fill-blue-500")%>
+                    <%= retweet.tweet.user.username %>
+                    <%= retweet.tweet.body%>
+                <% end %>
+            </div>
+        <% end %>
+    <% else %>
+        <% if @profile.user.retweets.any? %>
+            <div>
+                <% @profile.user.retweets.each do |retweet| %>
+                    <p><%= @profile.user.username %> Retweeted</p>
+                    <%= image_tag("retweet-icon.svg", class: "inline-block h-6 w-6 hover:fill-blue-500")%>
+                    <%= retweet.tweet.user.username %>
+                    <%= retweet.tweet.body%>
+                <% end %>
+            </div>
+        <% end %>
+    <% end %>
     <% if user_signed_in? %>
         <%= button_to "Log out", destroy_user_session_path, method: :delete %>
     <% end %>

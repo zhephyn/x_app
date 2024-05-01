@@ -1,5 +1,5 @@
 class Tweet < ApplicationRecord
     belongs_to :user
-    belongs_to :tweet, optional: true
+    has_many :retweets, dependent: :destroy
     has_many :comments, dependent: :destroy
 end

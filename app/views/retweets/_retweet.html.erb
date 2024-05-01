@@ -1,0 +1,21 @@
+<p>Partial for showing content of a retweet</p>
+<div>
+    <div>
+        <% if @user.id == current_user.id %>
+            <p>You Retweeted</p>
+            <%= image_tag("retweet-icon.svg", class: "inline-block h-6 w-6 hover:fill-blue-500")%>
+            <% current_user.retweets.each do |retweet| %>
+                <%= retweet.tweet.user.name %>
+                <%= retweet.tweet.user.body %>
+            <% end %>
+        <% else %>
+            <%= @user.name %> <p>Retweeted</p>
+            <%= image_tag("retweet-icon.svg", class: "inline-block h-6 w-6 hover:fill-blue-500")%>
+            <% @user.retweets.each do |retweet| %>
+                <%= retweet.tweet.user.name %>
+                <%= retweet.tweet.user.body %>
+            <% end %>
+        <% end %>
+        
+    </div>
+</div>

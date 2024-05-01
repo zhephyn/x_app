@@ -14,11 +14,11 @@ Rails.application.routes.draw do
   resources :tweets do
     resources :comments
     member do
-      post :retweet
+      post :retweet, to: "retweets#retweet", as: :retweet_tweet
       get :retweet
     end
   end
-
+  
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
