@@ -7,6 +7,13 @@
             <% current_user.retweets.each do |retweet| %>
                 <%= retweet.tweet.user.name %>
                 <%= retweet.tweet.user.body %>
+                <% if retweet.likes.any? %>
+                    <div>
+                        <p><%= retweet.likes.count %> Likes </p>
+                    </div>
+                <% else %>
+                    <%= button_to "Like Retweet", new_like_path(retweet), method: :post%>
+                <% end %>
             <% end %>
         <% else %>
             <%= @user.name %> <p>Retweeted</p>
@@ -14,6 +21,13 @@
             <% @user.retweets.each do |retweet| %>
                 <%= retweet.tweet.user.name %>
                 <%= retweet.tweet.user.body %>
+                <% if retweet.likes.any? %>
+                    <div>
+                        <p><%= retweet.likes.count %>likes</p>
+                    </div>
+                <% else %>
+                    <%= button_to "Like Retweet", new_like_path(retweet), method: :post%>
+                <% end %>
             <% end %>
         <% end %>
         

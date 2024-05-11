@@ -8,6 +8,13 @@
         <%= link_to "Edit this tweet", edit_tweet_path, method: :get %>
         <%= button_to "Delete this tweet", tweet_path, method: :delete %>
         <%= link_to "Back to home page", tweets_path %>
+        <% if @tweet.likes.any? %>
+            <div>
+                <p><%=@tweet.likes.count%> Likes </p>
+            </div>
+        <% else %>
+            <%= button_to "Like Tweet", likes_path(likeable_id: @tweet.id, likeable_type: @tweet.class.name) ,method: :post %>
+        <% end %>
     </div>
 </div> 
 <div>
@@ -19,6 +26,13 @@
                     <p>@<%= comment.user.username %></a>
                     <em><%= comment.created_at %></em>
                     <%= comment.body %>
+                    <% if comment.likes.any? %>
+                        <div>
+                            <p><%= comment.likes.count %> Likes</p>
+                        </div>
+                    <% else %>
+                        <%= button_to "Like Comment", new_like_path(comment), method: :post %>
+                    <% end %>
                     <% if comment.user_id == current_user.id %>
                         <%= button_to "Delete comment", tweet_comment_path(@tweet, comment), method: :delete %>
                     <% end %>

@@ -84,6 +84,13 @@
             <div>
                 <%= quote.tweet.user.username %>
                 <%= quote.tweet.body%>
+                <% if quote.likes.any? %>
+                    <div>
+                        <p><%= quote.likes.count%> Likes</p>
+                    </div>
+                <% else %>
+                    <%= button_to "Like Quote", new_like_path(quote), method: :post %>
+                <% end %>
             </div>
         <% end %>
     <% end %>
