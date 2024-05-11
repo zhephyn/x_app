@@ -13,7 +13,7 @@
                 <p><%=@tweet.likes.count%> Likes </p>
             </div>
         <% else %>
-            <%= button_to "Like Tweet", likes_path(likeable_id: @tweet.id, likeable_type: @tweet.class.name) ,method: :post %>
+            <%= button_to "Like", likes_path(@tweet), params: {like: {likeable_type: @tweet.class.name, likeable_id: @tweet.id }}, method: :post %>
         <% end %>
     </div>
 </div> 

@@ -9,8 +9,8 @@ Rails.application.routes.draw do
   delete "relationships/destroy", to: "relationships#destroy", as: :destroy_relationship
   devise_for :users, controllers: { registrations: "users/registrations"}
   resources :profiles
-  resources :likes
-  post "likes/new", to: "likes#create", as: :likes_path
+  resources :likes, only: [:create, :destroy]
+  #post "likes/new", to: "likes#create", as: :likes_path
   resources :relationships
   resources :tweets do
     resources :comments
