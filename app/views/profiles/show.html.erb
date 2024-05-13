@@ -61,6 +61,14 @@
                     <%= image_tag("retweet-icon.svg", class: "inline-block h-6 w-6 hover:fill-blue-500")%>
                     <%= retweet.tweet.user.username %>
                     <%= retweet.tweet.body%>
+                    <% if retweet.likes.any? %>
+                        <div>
+                            <p><%= retweet.likes.count %> Likes</p>
+                            <%= button_to "Unlike retweet", like_path(retweet.likes.find_by(user_id: current_user.id)), method: :delete %>
+                        </div>
+                    <% else %>
+                        <%= button_to "Like Retweet", likes_path(retweet), params: {like: {likeable_id: retweet.id, likeable_type: retweet.class.name }}%>
+                    <% end %>
                 <% end %>
             </div>
         <% end %>
@@ -72,6 +80,14 @@
                     <%= image_tag("retweet-icon.svg", class: "inline-block h-6 w-6 hover:fill-blue-500")%>
                     <%= retweet.tweet.user.username %>
                     <%= retweet.tweet.body%>
+                    <% if retweet.likes.any? %>
+                        <div>
+                            <p><%= retweet.likes.count %> Likes</p>
+                            <%= button_to "Unlike retweet", like_path(retweet.likes.find_by(user_id: current_user.id)), method: :delete %>
+                        </div>
+                    <% else %>
+                        <%= button_to "Like Retweet", likes_path(retweet), params: {like: {likeable_id: retweet.id, likeable_type: retweet.class.name }}%>
+                    <% end %>
                 <% end %>
             </div>
         <% end %>
@@ -87,9 +103,10 @@
                 <% if quote.likes.any? %>
                     <div>
                         <p><%= quote.likes.count%> Likes</p>
+                        <%= button_to "Unlike Quote", like_path(quote.likes.find_by(user_id: current_user.id)), method: :delete%>
                     </div>
                 <% else %>
-                    <%= button_to "Like Quote", new_like_path(quote), method: :post %>
+                    <%= button_to "Like Quote", likes_path(quote), params: {like: {likeable_type: quote.class.name, likeable_id: quote.id }}, method: :post %>
                 <% end %>
             </div>
         <% end %>

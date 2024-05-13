@@ -11,6 +11,7 @@
         <% if @tweet.likes.any? %>
             <div>
                 <p><%=@tweet.likes.count%> Likes </p>
+                <%= button_to "Unlike tweet", like_path(@tweet.likes.find_by(user_id: current_user.id)), method: :delete %>
             </div>
         <% else %>
             <%= button_to "Like", likes_path(@tweet), params: {like: {likeable_type: @tweet.class.name, likeable_id: @tweet.id }}, method: :post %>
@@ -29,9 +30,10 @@
                     <% if comment.likes.any? %>
                         <div>
                             <p><%= comment.likes.count %> Likes</p>
+                            <%= button_to "Unlike Comment", like_path(comment.likes.find_by(user_id: current_user.id)), method: :delete %>
                         </div>
                     <% else %>
-                        <%= button_to "Like Comment", new_like_path(comment), method: :post %>
+                        <%= button_to "Like Comment", likes_path(comment), params: {like: {likeable_type: comment.class.name, likeable_id: comment.id}}, method: :post %>
                     <% end %>
                     <% if comment.user_id == current_user.id %>
                         <%= button_to "Delete comment", tweet_comment_path(@tweet, comment), method: :delete %>

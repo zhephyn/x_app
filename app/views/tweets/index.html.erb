@@ -13,7 +13,7 @@
         <% if tweet.likes.any? %>
             <div>
                 <p><%= tweet.likes.count %> Likes</p>
-                <%= button_to "Unlike tweet", like_path(tweet), params: {like: {likeable_id: tweet.id,likeable_type: tweet.class.name}}, method: :delete%>
+                <%= button_to "Unlike tweet", like_path(tweet.likes.find_by(user_id: current_user.id)), method: :delete %>
             </div>
         <% else %>
             <%= button_to "Like Tweet", likes_path(tweet), params: {like: {likeable_id: tweet.id, likeable_type: tweet.class.name}}, method: :post %>
