@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   devise_for :users, controllers: { registrations: "users/registrations"}
   resources :profiles
   resources :likes, only: [:create, :destroy]
+  resources :bookmarks, only: [:create, :destroy]
   #post "likes/new", to: "likes#create", as: :likes_path
   resources :relationships
   resources :tweets do

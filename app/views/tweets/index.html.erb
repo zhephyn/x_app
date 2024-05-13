@@ -18,6 +18,11 @@
         <% else %>
             <%= button_to "Like Tweet", likes_path(tweet), params: {like: {likeable_id: tweet.id, likeable_type: tweet.class.name}}, method: :post %>
         <% end %>
+        <% if  current_user.bookmarks.exists?(bookmarkable_id: tweet.id ,bookmarkable_type: tweet.class.name) %>
+            <%= button_to "Unbookmark", bookmark_path(tweet.bookmarks.find_by(user_id: current_user.id)), method: :delete %>
+        <% else %>
+            <%= button_to "Bookmark", bookmarks_path(tweet), params: {bookmark: {bookmarkable_type: tweet.class.name, bookmarkable_id: current_user.id}}%>
+        <% end %>
     </div>
 <% end %>
 </div>

@@ -106,8 +106,7 @@
                         <%= button_to "Unlike Quote", like_path(quote.likes.find_by(user_id: current_user.id)), method: :delete%>
                     </div>
                 <% else %>
-                    <%= button_to "Like Quote", likes_path(quote), params: {like: {likeable_type: quote.class.name, likeable_id: quote.id }}, method: :post %>
-                <% end %>
+                    <%= button_to "Like Quote", likes_path(quote), params: {like: {likeable_type: quote.class.name, likeable_id: quote.id }}, method: :post %>                <% end %>
             </div>
         <% end %>
     <% end %>
