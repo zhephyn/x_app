@@ -16,6 +16,11 @@
         <% else %>
             <%= button_to "Like", likes_path(@tweet), params: {like: {likeable_type: @tweet.class.name, likeable_id: @tweet.id }}, method: :post %>
         <% end %>
+        <% if  current_user.bookmarks.exists?(bookmarkable_id: @tweet.id ,bookmarkable_type: "Tweet", user_id: current_user.id ) %>
+            <%= button_to "Unbookmark", bookmark_path(@tweet.bookmarks.find_by(user_id: current_user.id)), method: :delete %>
+        <% else %>
+            <%= button_to "Bookmark", bookmarks_path(@tweet), params: {bookmark: {bookmarkable_type: @tweet.class.name, bookmarkable_id: @tweet.id}}, method: :post %>
+        <% end %>
     </div>
 </div> 
 <div>
@@ -34,6 +39,11 @@
                         </div>
                     <% else %>
                         <%= button_to "Like Comment", likes_path(comment), params: {like: {likeable_type: comment.class.name, likeable_id: comment.id}}, method: :post %>
+                    <% end %>
+                    <% if current_user.bookmarks.exists?(bookmarkable_id:comment.id, bookmarkable_type: "Tweet", user_id: current_user.id) %>
+                        <%= button_to "Unbookmark Comment", bookmark_path(comment.bookmarks.find_by(user_id: current_user.id)), method: :delete%>
+                    <% else %>
+                        <%= button_to "Bookmark Comment", bookmarks_path(comment), params: {bookmark: {bookmarkable_id: comment.id, bookmarkable_type: comment.class.name}}, method: :post%>
                     <% end %>
                     <% if comment.user_id == current_user.id %>
                         <%= button_to "Delete comment", tweet_comment_path(@tweet, comment), method: :delete %>

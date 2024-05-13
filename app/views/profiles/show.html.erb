@@ -69,6 +69,11 @@
                     <% else %>
                         <%= button_to "Like Retweet", likes_path(retweet), params: {like: {likeable_id: retweet.id, likeable_type: retweet.class.name }}%>
                     <% end %>
+                    <% if  current_user.bookmarks.exists?(bookmarkable_id: retweet.id ,bookmarkable_type: "Retweet", user_id: current_user.id ) %>
+                        <%= button_to "Unbookmark", bookmark_path(retweet.bookmarks.find_by(user_id: current_user.id)), method: :delete %>
+                    <% else %>
+                        <%= button_to "Bookmark", bookmarks_path(retweet), params: {bookmark: {bookmarkable_type: retweet.class.name, bookmarkable_id: retweet.id}}, method: :post %>
+                    <% end %>
                 <% end %>
             </div>
         <% end %>
@@ -106,7 +111,13 @@
                         <%= button_to "Unlike Quote", like_path(quote.likes.find_by(user_id: current_user.id)), method: :delete%>
                     </div>
                 <% else %>
-                    <%= button_to "Like Quote", likes_path(quote), params: {like: {likeable_type: quote.class.name, likeable_id: quote.id }}, method: :post %>                <% end %>
+                    <%= button_to "Like Quote", likes_path(quote), params: {like: {likeable_type: quote.class.name, likeable_id: quote.id }}, method: :post %> 
+                <% end %>
+                <% if current_user.bookmarks.exists?(bookmarkable_id: quote.id,bookmarkable_type: "Quote",user_id: current_user.id) %>
+                    <%= button_to "Unbookmark Quote", bookmark_path(quote.bookmarks.find_by(user_id: current_user.id)), method: :delete %>
+                <% else %>
+                    <%= button_to "Bookmark Quote", bookmarks_path(quote), params: {bookmark: {bookmarkable_type: quote.class.name, bookmarkable_id:quote.id}}, method: :post%>
+                <% end %>
             </div>
         <% end %>
     <% end %>
