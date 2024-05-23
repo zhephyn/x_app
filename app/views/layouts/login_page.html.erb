@@ -1,1 +1,24 @@
-<h1>Form to allow a user to login</h1>
+<div class="flex flex-col place-items-center bg-gray-800 text-white font-sans text-sm rounded-md mx-8 mt-3 pt-12 pb-16">
+  <div>
+    <img class= "rounded-full h-12 w-12 m-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600", alt="tailwind-css logo">
+    <h2 class="font-bold mt-2">Sign in to your account</h2>
+  </div>
+  <div>
+    <form class="mt-4">
+      <div>
+        <label class="font-medium" for = "email" >Email address </label>
+        <input class="rounded-md block w-full mt-1" type = "email", name = "email", id= "email">
+      </div>
+      <div>
+        <div class="inline-flex justify-between gap-x-14 font-medium mt-2"><p>Password</p> <a class="text-sky-600/100 hover:text-sky-400/50 font-bold font-sans" href="erincorp.com/signup">Forgot Password?</a></div>
+        <input class="rounded-md block w-full mt-1" type= "password", name = "password", id = "password">
+      </div>
+      <div>
+        <button type= "submit" class="bg-blue-600 rounded-md w-full mt-3 mb-3 font-medium p-1">Sign In</button>
+      </div>
+      <div class="text-center mb-6">
+        <p>Not a member? <a  class= "text-sky-600/100 hover:text-sky-400/50 font-bold font-sans"href="erincorp.com/signup">Start a 14 day Trial</a></p>
+      </div>
+    </form>
+  </div>
+</div>
