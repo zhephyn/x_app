@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get "layouts/login_page", to: "layouts#login_page"
+  get "layouts/layout_page", to: "layouts#layout_page"
+  get "layouts/signup_page", to: "layouts#signup_page"
   get 'comments/show'
   get 'comments/new'
   get 'comments/create'
