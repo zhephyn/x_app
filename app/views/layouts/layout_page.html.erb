@@ -1,1 +1,139 @@
-<h1>Twitter home page UI for a logged in user</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Twitter Clone</title>
+  <link href="<%= asset_path 'application.css' %>" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+  <div class="flex">
+    <!-- Sidebar -->
+    <div class="w-1/5 bg-white h-screen p-4">
+      <div class="mb-4">
+        <a href="#" class="text-blue-500 text-2xl font-bold">Twitter</a>
+      </div>
+      <nav>
+        <ul>
+            <div class="flex items-center">
+                <%= image_tag("home-icon.svg", alt: "Home Icon", class: "w-6 h-6 pb-8")%>
+                <li class="mb-2"><a href="#" class="text-gray-700 hover:text-blue-500">Home</a></li>
+            </div>
+            <div class="flex items-center">
+                <%= image_tag("explore-icon.svg", alt: "Explore Icon", class: "w-6 h-6 pb-8")%>
+                <li class="mb-2"><a href="#" class="text-gray-700 hover:text-blue-500">Explore</a></li>
+            </div>
+            <div class="flex items-center">
+                <%= image_tag("notifications-icon.svg", alt: "Notifications Icon",class: "w-6 h-6 pb-8")%>
+                <li class="mb-2"><a href="#" class="text-gray-700 hover:text-blue-500">Notifications</a></li>
+            </div>
+            <div class="flex items-center">
+                <%= image_tag("messages-icon.svg", alt: "Messages Icon",class: "w-6 h-6 pb-8")%>
+                <li class="mb-2"><a href="#" class="text-gray-700 hover:text-blue-500">Messages</a></li>
+            </div>
+            <div class="flex items-center">
+                <%= image_tag("bookmarks-icon.svg", alt: "Bookmarks Icon", class: "w-6 h-6 pb-8")%>
+                <li class="mb-2"><a href="#" class="text-gray-700 hover:text-blue-500">Bookmarks</a></li>
+            </div>
+            <div class="flex items-center">
+                <%= image_tag("lists-icon.svg", alt: "Lists Icon", class: "w-6 h-6 pb-8")%>
+                <li class="mb-2"><a href="#" class="text-gray-700 hover:text-blue-500">Lists</a></li>
+            </div>
+            <div class="flex items-center">
+                <%= image_tag("profile-icon.svg", alt: "Profile Icon", class: "w-6 h-6 pb-8")%>
+                <li class="mb-2"><a href="#" class="text-gray-700 hover:text-blue-500">Profile</a></li>
+            </div>
+            <div class="flex items-center">
+                <%= image_tag("more-icon.svg", alt: "More Icon", class: "w-6 h-6 pb-8")%>
+                <li><a href="#" class="text-gray-700 hover:text-blue-500">More</a></li>
+            </div>
+        </ul>
+      </nav>
+      <button class="mt-4 w-full bg-blue-500 text-white py-2 rounded">Tweet</button>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 p-4">
+       <div>
+            <h1 class="font-bold">Home</h1>
+            <%= image_tag("star-icon.svg", alt: "Star Icon", class: "w-6 h-6")%>
+      </div>
+      <div class="bg-white p-4 rounded-lg shadow-md mb-4">
+        <%= image_tag("profile-icon.svg", alt: "User Profile Image", class: "w-6 h-6")%>
+        <form action="#" method="post">
+          <textarea class="w-full p-2 border rounded" placeholder="What's happening?" rows="3"></textarea>
+          <div class="flex justify-between items-center mt-2">
+            <div>
+              <button type="button" class="text-blue-500">Photo
+                <%= image_tag("photo-icon.svg", alt: "Photo Icon", class: "w-6 h-6")%>
+              </button>
+              <button type="button" class="text-blue-500">GIF
+                <%= image_tag("gif-icon.svg", alt: "Gif Icon", class: "w-6 h-6")%>
+              </button>
+              <button type="button" class="text-blue-500">Poll
+                <%= image_tag("poll-icon.svg", alt: "Poll Icon", class: "w-6 h-6")%>
+              </button>
+              <button type="button" class="text-blue-500">Emoji
+                <%= image_tag("emoji-icon.svg", alt: "Emoji Icon", class: "w-6 h-6")%>
+              </button>
+            </div>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Tweet</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="bg-white p-4 rounded-lg shadow-md mb-4">
+        <%= image_tag("profile-icon.svg", alt: "User Profile Image", class: "w-6 h-6")%>
+        <p class="text-gray-800"><strong>Brie</strong> @Skcth_ComedyFan</p>
+        <p>Giving standup comedy a go. Open mic starts at 7, hit me up if you want ticket <span class="text-blue-500">#heregoesnothing</span></p>
+        <div class="flex items-center mt-2">
+          <button class="text-gray-500 hover:text-blue-500">1</button>
+          <button class="text-gray-500 hover:text-blue-500 ml-4">8</button>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 rounded-lg shadow-md mb-4">
+        <%= image_tag("profile-icon.svg", alt: "User Profile Image", class: "w-6 h-6")%>
+        <p class="text-gray-800"><strong>Harold</strong> @h_wang88</p>
+        <p>Vacation is going great!</p>
+        <img src="sunset.jpg" alt="Sunset" class="mt-2 rounded-lg">
+        <div class="flex items-center mt-2">
+          <button class="text-gray-500 hover:text-blue-500">3</button>
+          <button class="text-gray-500 hover:text-blue-500 ml-4">5</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trends -->
+    <div class="w-1/4 p-4">
+      <div class="bg-white p-4 rounded-lg shadow-md">
+        <h2 class="text-lg font-bold mb-4">Trends for you</h2>
+        <ul>
+          <li class="mb-4">
+            <p class="text-gray-800">Trending worldwide</p>
+            <p class="text-blue-500">#BreakingNews</p>
+          </li>
+          <li class="mb-4">
+            <p class="text-gray-800">Space</p>
+            <p class="text-blue-500">Lunar photography improves the discovery of the moon</p>
+          </li>
+          <li class="mb-4">
+            <p class="text-gray-800">Trending worldwide</p>
+            <p class="text-blue-500">#WorldNews</p>
+          </li>
+          <li class="mb-4">
+            <p class="text-gray-800">Animals</p>
+            <p class="text-blue-500">These cats are ready for #InternationalCatDay</p>
+          </li>
+          <li class="mb-4">
+            <p class="text-gray-800">Trending worldwide</p>
+            <p class="text-blue-500">#GreatestOfAllTime</p>
+          </li>
+        </ul>
+        <a href="#" class="text-blue-500">Show more</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+
