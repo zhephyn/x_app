@@ -49,6 +49,15 @@
     <div class="flex-1 p-4">
       <div>
         <div><h2>Home</h2></div>
+        <div class="bg-white w-full rounded-lg">
+          <%= button_to do %>
+            <%= image_tag(current_user.profile.profile_photo, class: "w-10 h-10 rounded-full cursor-pointer") %>
+          <% end %>
+          <%= form_with model: @tweet do |form| %>
+            <%= form.text_area :body, class: " w-full border-none", rows: "2", placeholder: "What's Happening?" %>
+            <%= form.submit "Tweet", class: "bg-blue-500 text-white rounded-lg px-4 py-1 rounded cursor-pointer" %>
+            <% end %>
+        </div>
       </div>
     </div>
 

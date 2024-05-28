@@ -7,6 +7,7 @@ class TweetsController < ApplicationController
 
     def index
         if user_signed_in?
+            @tweet = current_user.tweets.build
             @tweets = Tweet.all
         else
             redirect_to :root, notice: "You need to sign in or create an account with us to view tweets"
