@@ -1,35 +1,37 @@
-<header>
     <div>
         <div>
+            <div>
+                <% if @profile.cover_photo.attached? %>
+                    <%= image_tag(@profile.cover_photo , class: "w-full h-15" )%>
+                <% end %>
+            </div>
+            <div>
+                <% if @profile.profile_photo.attached? %>
+                    <%= image_tag(@profile.profile_photo, class: "w-10 h-10 rounded-full") %>
+                <% end %>
+                <%= button_to "Edit Profile", edit_profile_path(@profile), method: :get, class: "mt-4 bg-blue-500 text-white py-2 rounded" %>
+            </div>
+        </div>
+    </div>
+    <div>
+        <h1>Details about profile owner go here eg username, follower count, bio, website</h1>
+        <div>
+        <div>
+            <p><%= @profile.user.username %><b>@<%= @profile.user.username %></b></p>
             <% if current_user != @profile_owner %>
                 <% if current_user.following?(@profile_owner)%>
                     <% relationship = current_user.relationship_with(@profile_owner)%>
-                    <%= button_to "Unfollow User", destroy_relationship_path, method: :delete, params: {id: relationship.id, followed_id: @profile_owner.id} %>
+                    <%= button_to "Unfollow User", destroy_relationship_path, method: :delete, params: {id: relationship.id, followed_id: @profile_owner.id}, class: "mt-4 bg-blue-500 text-white py-2 rounded" %>
                 <% else %>
-                    <%= button_to "Follow User", create_relationship_path, method: :post, params: {followed_id: @profile_owner.id} %>
+                    <%= button_to "Follow User", create_relationship_path, method: :post, params: {followed_id: @profile_owner.id}, class: "mt-4 bg-blue-500 text-white py-2 rounded" %>
                 <% end %>
             <% end %>
         </div>
-
-        <h1><%= @profile.user.username %></h1>
         <div>
-            <div><%=@profile.user.followers.count%><p> <%= link_to "Followers",followers_user_path(@profile.user), method: :get %></p></div>
-            <div><%=@profile.user.following.count%><p> <%= link_to "Following", following_user_path(@profile.user), method: :get %></p></div>
+            <div><%=@profile.user.followers.count%><%= button_to "Followers",followers_user_path(@profile.user), method: :get, class: "mt-4 bg-blue-500 text-white py-2 rounded"  %></div>
+            <div><%=@profile.user.following.count%><%= button_to "Following", following_user_path(@profile.user), method: :get, class: "mt-4 bg-blue-500 text-white py-2 rounded"  %></div>
         </div>
-        <div>
-            <div>
-            <p>Profile Photo:</p>
-            <% if @profile.profile_photo.attached? %>
-                <%= image_tag(@profile.profile_photo) %>
-            <% end %>
-            </div>
-            <div>
-            <p>Cover Photo:</p>
-            <% if @profile.cover_photo.attached? %>
-                <%= image_tag(@profile.cover_photo) %>
-            <% end %>
-            </div>
-        </div>
+        
         <div>
             <p>Bio:<%= @profile.bio %></p>
         </div>
@@ -40,10 +42,11 @@
             <p>Website:<%= @profile.website %></p>
         </div>
     </div>
-</header>
-<body>
-    <h2>Tweets</h2>
+    </div>
     <div>
+        <h1>All Tweets, Retweets and Quote tweets go here</h1>
+    <h2>Tweets</h2>
+    <div class="border-t-2 border-b-2">
         <% @profile.user.tweets.each do |tweet| %>
             <div>
             <%= tweet.body %>
@@ -55,7 +58,7 @@
     <h3>Retweets</h3>
     <% if @profile.user.id == current_user.id %>
         <% if current_user.retweets.any?%>
-            <div>
+            <div class="border-t-2 border-b-2">
                 <% current_user.retweets.each do |retweet| %>
                     <p>You Retweeted</p>
                     <%= image_tag("retweet-icon.svg", class: "inline-block h-6 w-6 hover:fill-blue-500")%>
@@ -79,7 +82,7 @@
         <% end %>
     <% else %>
         <% if @profile.user.retweets.any? %>
-            <div>
+            <div class="border-t-2 border-b-2">
                 <% @profile.user.retweets.each do |retweet| %>
                     <p><%= @profile.user.username %> Retweeted</p>
                     <%= image_tag("retweet-icon.svg", class: "inline-block h-6 w-6 hover:fill-blue-500")%>
@@ -99,7 +102,28 @@
     <% end %>
     <h3>Qoute tweets</h3>
     <% if @profile.user.quotes.any? %>
-        <% @profile.user.quotes.each do |quote| %>
+        <div <% @profile.user.quotes.each do |quote| %>
+            <b><em><%= quote.user.username %></em></b>
+            <b><em><%= quote.body %></em></b>
+            <div>
+                <%= quote.tweet.user.username %>
+                <%= quote.tweet.body%>
+                <% if quote.likes.any? %>
+                    <div>
+                        <p><%= quote.likes.count%> Likes</p>
+                        <%= button_to "Unlike Quote", like_path(quote.likes.find_by(user_id: current_user.id)), method: :delete%>
+                    </div>
+                <% else %>
+                    <%= button_to "Like Quote", likes_path(quote), params: {like: {likeable_type: quote.class.name, likeable_id: quote.id }}, method: :post %> 
+                <% end %>
+                <% if current_user.bookmarks.exists?(bookmarkable_id: quote.id,bookmarkable_type: "Quote",user_id: current_user.id) %>
+                    <%= button_to "Unbookmark Quote", bookmark_path(quote.bookmarks.find_by(user_id: current_user.id)), method: :delete %>
+                <% else %>
+                    <%= button_to "Bookmark Quote", bookmarks_path(quote), params: {bookmark: {bookmarkable_type: quote.class.name, bookmarkable_id:quote.id}}, method: :post%>
+                <% end %>
+            </div>
+        <% end %>>
+            <% @profile.user.quotes.each do |quote| %>
             <b><em><%= quote.user.username %></em></b>
             <b><em><%= quote.body %></em></b>
             <div>
@@ -120,8 +144,10 @@
                 <% end %>
             </div>
         <% end %>
+        </div>
     <% end %>
     <% if user_signed_in? %>
         <%= button_to "Log out", destroy_user_session_path, method: :delete %>
     <% end %>
-</body>
+</div>
+

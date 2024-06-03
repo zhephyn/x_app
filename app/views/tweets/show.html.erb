@@ -1,7 +1,7 @@
 <div>
-    <div>
-        <h2>Details of Tweet</p>
-        <p><b><%=@tweet.user.username%>@</b><%=@tweet.user.username%></p>
+    <div class="border-t-2 border-b-2">
+        <h1>Details of Tweet</h1>
+        <p><b><%=@tweet.user.username%></b>@<%=@tweet.user.username%></p>
         <% if @tweet.user.profile.present? && @tweet.user.profile.profile_photo.attached?%>
                 <%= button_to do %>
                     <%= image_tag(@tweet.user.profile.profile_photo,class: "w-10 h-10 rounded-full cursor-pointer")%>
@@ -92,15 +92,17 @@
                 </div>
     </div>
     <h2><b>Details of Comments above tweet</b></h2>
-    <% @tweet.comments.each do |comment| %>
-        <p><b><%=comment.user.username%>@</b><%=comment.user.username%></p>
+    <div class="border-b-2">
+      <% @tweet.comments.each do |comment| %>
+        <p class="border-t-2"></p>
+        <p><b><%=comment.user.username%></b>@<%=comment.user.username%></p>
         <% if comment.user.profile.present? && comment.user.profile.profile_photo.attached?%>
                 <%= button_to do %>
                     <%= image_tag(comment.user.profile.profile_photo,class: "w-10 h-10 rounded-full cursor-pointer")%>
                 <% end %>
         <% end %>
         <%= comment.body %>
-        <%= comment.created_at %>
+        <p>Created At: <%= comment.created_at %></p>
         <div class="flex">
             <div class="flex">
                 <% if current_user.likes.exists?(likeable_id: comment, likeable_type: comment.class.name)%>
@@ -184,6 +186,7 @@
             </div>
         </div>
     <% end %>
+    </div>
     <h2><b>Form for creating comment at bottom</b></h2>
     <div>
         <h3>Add a comment to this tweet:</h3>
