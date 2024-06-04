@@ -1,69 +1,79 @@
-    <div>
-        <div>
-            <div>
-                <% if @profile.cover_photo.attached? %>
-                    <%= image_tag(@profile.cover_photo , class: "w-full h-15" )%>
-                <% end %>
-            </div>
-            <div>
-                <% if @profile.profile_photo.attached? %>
-                    <%= image_tag(@profile.profile_photo, class: "w-10 h-10 rounded-full") %>
-                <% end %>
-                <%= button_to "Edit Profile", edit_profile_path(@profile), method: :get, class: "mt-4 bg-blue-500 text-white py-2 rounded" %>
-            </div>
-        </div>
+<div class="profile-page">
+    <div class="cover-photo">
+        <% if @profile.cover_photo.attached? %>
+            <%= image_tag(@profile.cover_photo, class: "w-full h-60 object-cover") %>
+        <% end %>
     </div>
-    <div>
-        <h1>Details about profile owner go here eg username, follower count, bio, website</h1>
-        <div>
-        <div>
-            <p><%= @profile.user.username %><b>@<%= @profile.user.username %></b></p>
-            <% if current_user != @profile_owner %>
-                <% if current_user.following?(@profile_owner)%>
-                    <% relationship = current_user.relationship_with(@profile_owner)%>
-                    <%= button_to "Unfollow User", destroy_relationship_path, method: :delete, params: {id: relationship.id, followed_id: @profile_owner.id}, class: "mt-4 bg-blue-500 text-white py-2 rounded" %>
-                <% else %>
-                    <%= button_to "Follow User", create_relationship_path, method: :post, params: {followed_id: @profile_owner.id}, class: "mt-4 bg-blue-500 text-white py-2 rounded" %>
-                <% end %>
+    <div class="profile-header flex items-center justify-between p-4">
+        <div class="profile-photo">
+            <% if @profile.profile_photo.attached? %>
+                <%= image_tag(@profile.profile_photo, class: "w-24 h-24 rounded-full border-4 border-white -mt-16") %>
             <% end %>
         </div>
         <div>
-            <div><%=@profile.user.followers.count%><%= button_to "Followers",followers_user_path(@profile.user), method: :get, class: "mt-4 bg-blue-500 text-white py-2 rounded"  %></div>
-            <div><%=@profile.user.following.count%><%= button_to "Following", following_user_path(@profile.user), method: :get, class: "mt-4 bg-blue-500 text-white py-2 rounded"  %></div>
-        </div>
-        
-        <div>
-            <p>Bio:<%= @profile.bio %></p>
-        </div>
-        <div>
-            <p>Location:<%= @profile.location %></p>
-        </div>
-        <div>
-            <p>Website:<%= @profile.website %></p>
+            <% if current_user != @profile_owner %>
+                <% if current_user.following?(@profile_owner) %>
+                    <% relationship = current_user.relationship_with(@profile_owner) %>
+                    <%= button_to "Unfollow", destroy_relationship_path, method: :delete, params: { id: relationship.id, followed_id: @profile_owner.id }, class: "follow-button" %>
+                <% else %>
+                    <%= button_to "Follow", create_relationship_path, method: :post, params: { followed_id: @profile_owner.id }, class: "follow-button" %>
+                <% end %>
+            <% else %>
+                <%= button_to "Edit Profile", edit_profile_path(@profile), method: :get, class: "edit-profile-button" %>
+            <% end %>
         </div>
     </div>
-    </div>
-    <div>
-        <h1>All Tweets, Retweets and Quote tweets go here</h1>
-    <h2>Tweets</h2>
-    <div class="border-t-2 border-b-2">
-        <% @profile.user.tweets.each do |tweet| %>
+    <div class="profile-info p-4">
+        <div>
+            <h1 class="username text-xl font-bold"><%= @profile.user.username %></h1>
+            <p class="handle text-gray-500">@<%= @profile.user.username %></p>
+        </div>
+        <div class="follow-stats flex space-x-4 mt-2">
             <div>
-            <%= tweet.body %>
-            <%= link_to "View tweet", tweet_path(tweet)%>
+                <%= link_to "Followers", followers_user_path(@profile.user), class: "follow-count" %>
+                <span class="text-gray-500"><%= @profile.user.followers.count %> Followers</span>
             </div>
-            <div class=" flex">
-            <div class="flex">
-                <% if current_user.likes.exists?(likeable_id: tweet.id, likeable_type: tweet.class.name)%>
-                    <%= button_to like_path(tweet.likes.find_by(user_id: current_user.id)), method: :delete do %>
+            <div>
+                <%= link_to "Following", following_user_path(@profile.user), class: "follow-count" %>
+                <span class="text-gray-500"><%= @profile.user.following.count %> Following</span>
+            </div>
+        </div>
+        <div class="bio mt-4">
+            <p><%= @profile.bio %></p>
+        </div>
+        <div class="location mt-2">
+            <p><%= @profile.location %></p>
+        </div>
+        <div class="website mt-2">
+            <%= link_to @profile.website, @profile.website, target: "_blank", class: "text-blue-500" %>
+        </div>
+    </div>
+    <div class="tweets-section mt-4">
+        <h2 class="text-xl font-bold border-b pb-2">Tweets</h2>
+        <div class="tweets-list mt-4 space-y-4">
+            <% @profile.user.tweets.each do |tweet| %>
+                <div class="tweet p-4 border rounded-lg">
+                    <p><b><%= tweet.user.username%></b>@<%= tweet.user.username %></p>
+                <% if tweet.user.profile.present? && tweet.user.profile.profile_photo.attached?%>
+                  <%= button_to profile_path(tweet.user.profile), method: :get do %>
+                    <%= image_tag(tweet.user.profile.profile_photo,class: "w-10 h-10 rounded-full cursor-pointer")%>
+                  <% end %>
+                <% end %>
+                <%= link_to tweet_path(tweet), method: :get do %>
+                  <%=tweet.body%>
+                <% end %>
+                <div class="flex">
+                  <div class="flex">
+                    <% if current_user.likes.exists?(likeable_id: tweet, likeable_type: tweet.class.name)%>
+                      <%= button_to like_path(tweet.likes.find_by(user_id: current_user.id)), method: :delete do %>
                         <button>
                           <svg class="w-5 h-5 rounded-full fill-red-500 cursor-pointer" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
                           </svg>
                         </button>
-                    <% end %>
-                    <p><%= tweet.likes.count %> Likes</p>
-                <% else %>
+                      <% end %>
+                        <p><%= tweet.likes.count %> Likes</p>
+                      <% else %>
                       <%= button_to likes_path(tweet), params: {like: {likeable_id: tweet.id, likeable_type: tweet.class.name}}, method: :post do %>
                         <button>
                           <svg class="w-5 h-5 rounded-full" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -72,10 +82,38 @@
                         </button>
                       <% end %>
                       <p><%= tweet.likes.count %> Likes </p>
-                <% end %>
-            </div>
-            <div class="flex hover:text-blue-500 cursor-pointer">
-                <% if current_user.bookmarks.exists?(bookmarkable_id: tweet.id ,bookmarkable_type: "Tweet", user_id: current_user.id)%>
+                    <% end %>
+                  </div>
+                  <div class="flex hover:text-blue-500 cursor-pointer">
+                  <%= button_to tweet_path(tweet), method: :get do %>
+                    <button>
+                      <svg class="w-5 h-5 rounded-full" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-.923 1.785A5.969 5.969 0 0 0 6 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337Z" />
+                      </svg>
+                    </button>
+                  <% end %>
+                  <% if tweet.comments.any? %>
+                    <p><%= tweet.comments.count%>Comments</p>
+                  <% else %>
+                    <p>0 Comments</p>
+                  <% end %>
+                  </div>
+                  <div class="flex hover:text-blue-500 cursor-pointer">
+                  <%= button_to retweet_tweet_tweet_path(tweet), method: :post do %>
+                    <button>
+                      <svg class="w-5 h-5 rounded-full"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 0 0-3.7-3.7 48.678 48.678 0 0 0-7.324 0 4.006 4.006 0 0 0-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 0 0 3.7 3.7 48.656 48.656 0 0 0 7.324 0 4.006 4.006 0 0 0 3.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3-3 3" />
+                      </svg>
+                    </button>
+                  <% end %>
+                  <% if tweet.retweets.any? %>
+                    <p><%=tweet.retweets.count%>Retweets</p>
+                  <% else %>
+                    <p>0 Retweets</p>
+                  <% end %>
+                  </div>
+                  <div class="flex hover:text-blue-500 cursor-pointer">
+                  <% if current_user.bookmarks.exists?(bookmarkable_id: tweet.id ,bookmarkable_type: "Tweet", user_id: current_user.id)%>
                     <%= button_to bookmark_path(tweet.bookmarks.find_by(user_id: current_user.id)), method: :delete do %>
                       <button>
                         <svg class="w-5 h-5 rounded-full fill-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -84,7 +122,7 @@
                       </button>
                     <% end %>
                     <p><%=tweet.bookmarks.count%> Bookmarks</p>
-                <% else %>
+                  <% else %>
                      <%= button_to bookmarks_path(tweet), params: {bookmark: {bookmarkable_type: tweet.class.name, bookmarkable_id: tweet.id}}, method: :post do %>
                       <button>
                         <svg class="w-5 h-5 rounded-full" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -93,101 +131,53 @@
                       </button>
                     <% end %>
                     <p><%=tweet.bookmarks.count%> Bookmarks</p>
-                <% end %>
-            </div>
+                  <% end %>
+                  </div>
+                  <div class="flex hover:text-blue-500 cursor-pointer">
+                  <%= button_to new_quote_tweet_path(tweet), method: :get do %>
+                    <button>
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                      </svg>
+                    </button>
+                  <% end %>
+                  <p>Quote Tweet</p>
+                  </div>
+                </div>
+                </div>
+            <% end %>
+            <%= link_to "Create new tweet", new_tweet_path, class: "create-tweet-button" %>
         </div>
-        <% end %>
-        <%= link_to "Create new tweet", new_tweet_path %>
-    </div> 
-    <h3>Retweets</h3>
-    <% if @profile.user.id == current_user.id %>
-        <% if current_user.retweets.any?%>
-            <div class="border-t-2 border-b-2">
-                <% current_user.retweets.each do |retweet| %>
-                    <p>You Retweeted</p>
-                    <%= image_tag("retweet-icon.svg", class: "inline-block h-6 w-6 hover:fill-blue-500")%>
-                    <%= retweet.tweet.user.username %>
-                    <%= retweet.tweet.body%>
-        <div class=" flex">
-            <div class="flex">
-                <% if current_user.likes.exists?(likeable_id: retweet.id, likeable_type: retweet.class.name)%>
-                    <%= button_to like_path(retweet.likes.find_by(user_id: current_user.id)), method: :delete do %>
-                        <button>
-                          <svg class="w-5 h-5 rounded-full fill-red-500 cursor-pointer" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-                          </svg>
-                        </button>
-                    <% end %>
-                    <p><%= retweet.likes.count %> Likes</p>
-                <% else %>
-                      <%= button_to likes_path(retweet), params: {like: {likeable_id: retweet.id, likeable_type: retweet.class.name}}, method: :post do %>
-                        <button>
-                          <svg class="w-5 h-5 rounded-full" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-                          </svg>
-                        </button>
-                      <% end %>
-                      <p><%= retweet.likes.count %> Likes </p>
-                <% end %>
-            </div>
-            <div class="flex hover:text-blue-500 cursor-pointer">
-                <% if current_user.bookmarks.exists?(bookmarkable_id: retweet.id ,bookmarkable_type: "Retweet", user_id: current_user.id)%>
-                    <%= button_to bookmark_path(retweet.bookmarks.find_by(user_id: current_user.id)), method: :delete do %>
-                      <button>
-                        <svg class="w-5 h-5 rounded-full fill-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
-                        </svg>
-                      </button>
-                    <% end %>
-                    <p><%=retweet.bookmarks.count%> Bookmarks</p>
-                <% else %>
-                     <%= button_to bookmarks_path(retweet), params: {bookmark: {bookmarkable_type: retweet.class.name, bookmarkable_id: retweet.id}}, method: :post do %>
-                      <button>
-                        <svg class="w-5 h-5 rounded-full" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
-                        </svg>
-                      </button>
-                    <% end %>
-                    <p><%=retweet.bookmarks.count%> Bookmarks</p>
-                <% end %>
-            </div>
-        </div>
-                    <% if retweet.likes.any? %>
-                        <div>
-                            <p><%= retweet.likes.count %> Likes</p>
-                            <%= button_to "Unlike retweet", like_path(retweet.likes.find_by(user_id: current_user.id)), method: :delete %>
-                        </div>
-                    <% else %>
-                        <%= button_to "Like Retweet", likes_path(retweet), params: {like: {likeable_id: retweet.id, likeable_type: retweet.class.name }}%>
-                    <% end %>
-                    <% if  current_user.bookmarks.exists?(bookmarkable_id: retweet.id ,bookmarkable_type: "Retweet", user_id: current_user.id ) %>
-                        <%= button_to "Unbookmark", bookmark_path(retweet.bookmarks.find_by(user_id: current_user.id)), method: :delete %>
-                    <% else %>
-                        <%= button_to "Bookmark", bookmarks_path(retweet), params: {bookmark: {bookmarkable_type: retweet.class.name, bookmarkable_id: retweet.id}}, method: :post %>
-                    <% end %>
-                <% end %>
-            </div>
-        <% end %>
-    <% else %>
+    </div>
+    <div class="retweets-section mt-4">
         <% if @profile.user.retweets.any? %>
-            <div class="border-t-2 border-b-2">
+            <h2 class="text-xl font-bold border-b pb-2">Retweets</h2>
+            <div class="retweets-list mt-4 space-y-4">
                 <% @profile.user.retweets.each do |retweet| %>
-                    <p><%= @profile.user.username %> Retweeted</p>
-                    <%= image_tag("retweet-icon.svg", class: "inline-block h-6 w-6 hover:fill-blue-500")%>
-                    <%= retweet.tweet.user.username %>
-                    <%= retweet.tweet.body%>
-                    <div class=" flex">
-            <div class="flex">
-                <% if current_user.likes.exists?(likeable_id: retweet, likeable_type: retweet.class.name)%>
-                    <%= button_to like_path(retweet.likes.find_by(user_id: current_user.id)), method: :delete do %>
+                    <div class="retweet p-4 border rounded-lg">
+                        <div class="flex">
+                            <p><b><%= @profile.user.username %></b> Retweeted</p>
+                            <%= image_tag("retweet-icon.svg", class: "inline-block h-6 w-6 hover:fill-blue-500") %>
+                        </div>
+                        <p><b><%= retweet.tweet.user.username %></b>@<%= retweet.tweet.user.username %></p>
+                        <% if retweet.tweet.user.profile.present? && retweet.tweet.user.profile.profile_photo.attached?%>
+                            <%= button_to profile_path(retweet.tweet.user.profile), method: :get do %>
+                                <%= image_tag(retweet.tweet.user.profile.profile_photo,class: "w-10 h-10 rounded-full cursor-pointer")%>
+                            <% end %>
+                        <% end %>
+                        <p><%= retweet.tweet.body %></p>
+                         <div class="flex">
+                  <div class="flex">
+                    <% if current_user.likes.exists?(likeable_id: retweet, likeable_type: retweet.class.name)%>
+                      <%= button_to like_path(retweet.likes.find_by(user_id: current_user.id)), method: :delete do %>
                         <button>
                           <svg class="w-5 h-5 rounded-full fill-red-500 cursor-pointer" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
                           </svg>
                         </button>
-                    <% end %>
-                    <p><%= retweet.likes.count %> Likes</p>
-                <% else %>
+                      <% end %>
+                        <p><%= retweet.likes.count %> Likes</p>
+                      <% else %>
                       <%= button_to likes_path(retweet), params: {like: {likeable_id: retweet.id, likeable_type: retweet.class.name}}, method: :post do %>
                         <button>
                           <svg class="w-5 h-5 rounded-full" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -196,139 +186,24 @@
                         </button>
                       <% end %>
                       <p><%= retweet.likes.count %> Likes </p>
-                <% end %>
-            </div>
-            <div class="flex hover:text-blue-500 cursor-pointer">
-                <% if current_user.bookmarks.exists?(bookmarkable_id: retweet.id ,bookmarkable_type: "Retweet", user_id: current_user.id)%>
-                    <%= button_to bookmark_path(retweet.bookmarks.find_by(user_id: current_user.id)), method: :delete do %>
-                      <button>
-                        <svg class="w-5 h-5 rounded-full fill-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
-                        </svg>
-                      </button>
                     <% end %>
-                    <p><%=retweet.bookmarks.count%> Bookmarks</p>
-                <% else %>
-                     <%= button_to bookmarks_path(retweet), params: {bookmark: {bookmarkable_type: retweet.class.name, bookmarkable_id: retweet.id}}, method: :post do %>
-                      <button>
-                        <svg class="w-5 h-5 rounded-full" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
-                        </svg>
-                      </button>
-                    <% end %>
-                    <p><%=retweet.bookmarks.count%> Bookmarks</p>
-                <% end %>
-            </div>
-        </div>
-                    <% if retweet.likes.any? %>
-                        <div>
-                            <p><%= retweet.likes.count %> Likes</p>
-                            <%= button_to "Unlike retweet", like_path(retweet.likes.find_by(user_id: current_user.id)), method: :delete %>
-                        </div>
-                    <% else %>
-                        <%= button_to "Like Retweet", likes_path(retweet), params: {like: {likeable_id: retweet.id, likeable_type: retweet.class.name }}%>
-                    <% end %>
-                <% end %>
-            </div>
-        <% end %>
-    <% end %>
-    <h3>Qoute tweets</h3>
-    <% if @profile.user.quotes.any? %>
-        <div <% @profile.user.quotes.each do |quote| %>
-            <b><em><%= quote.user.username %></em></b>
-            <b><em><%= quote.body %></em></b>
-            <div>
-                <%= quote.tweet.user.username %>
-                <%= quote.tweet.body%>
-                <div class=" flex">
-            <div class="flex">
-                <% if current_user.likes.exists?(likeable_id: quote, likeable_type: quote.class.name)%>
-                    <%= button_to like_path(quote.likes.find_by(user_id: current_user.id)), method: :delete do %>
-                        <button>
-                          <svg class="w-5 h-5 rounded-full fill-red-500 cursor-pointer" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-                          </svg>
-                        </button>
-                    <% end %>
-                    <p><%= quote.likes.count %> Likes</p>
-                <% else %>
-                      <%= button_to likes_path(quote), params: {like: {likeable_id: quote.id, likeable_type: quote.class.name}}, method: :post do %>
-                        <button>
-                          <svg class="w-5 h-5 rounded-full" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-                          </svg>
-                        </button>
-                      <% end %>
-                      <p><%= quote.likes.count %> Likes </p>
-                <% end %>
-            </div>
-            <div class="flex hover:text-blue-500 cursor-pointer">
-                <% if current_user.bookmarks.exists?(bookmarkable_id: quote.id ,bookmarkable_type: "Quote", user_id: current_user.id)%>
-                    <%= button_to bookmark_path(quote.bookmarks.find_by(user_id: current_user.id)), method: :delete do %>
-                      <button>
-                        <svg class="w-5 h-5 rounded-full fill-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
-                        </svg>
-                      </button>
-                    <% end %>
-                    <p><%=quote.bookmarks.count%> Bookmarks</p>
-                <% else %>
-                     <%= button_to bookmarks_path(quote), params: {bookmark: {bookmarkable_type: quote.class.name, bookmarkable_id: quote.id}}, method: :post do %>
-                      <button>
-                        <svg class="w-5 h-5 rounded-full" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
-                        </svg>
-                      </button>
-                    <% end %>
-                    <p><%=quote.bookmarks.count%> Bookmarks</p>
-                <% end %>
-            </div>
-        </div>
-                <% if quote.likes.any? %>
-                    <div>
-                        <p><%= quote.likes.count%> Likes</p>
-                        <%= button_to "Unlike Quote", like_path(quote.likes.find_by(user_id: current_user.id)), method: :delete%>
-                    </div>
-                <% else %>
-                    <%= button_to "Like Quote", likes_path(quote), params: {like: {likeable_type: quote.class.name, likeable_id: quote.id }}, method: :post %> 
-                <% end %>
-                <% if current_user.bookmarks.exists?(bookmarkable_id: quote.id,bookmarkable_type: "Quote",user_id: current_user.id) %>
-                    <%= button_to "Unbookmark Quote", bookmark_path(quote.bookmarks.find_by(user_id: current_user.id)), method: :delete %>
-                <% else %>
-                    <%= button_to "Bookmark Quote", bookmarks_path(quote), params: {bookmark: {bookmarkable_type: quote.class.name, bookmarkable_id:quote.id}}, method: :post%>
-                <% end %>
-            </div>
-        <% end %>>
-            <% @profile.user.quotes.each do |quote| %>
-            <b><em><%= quote.user.username %></em></b>
-            <b><em><%= quote.body %></em></b>
-            <div>
-                <%= quote.tweet.user.username %>
-                <%= quote.tweet.body%>
-                <div class=" flex">
-            <div class="flex">
-                <% if current_user.likes.exists?(likeable_id: quote, likeable_type: quote.class.name)%>
-                    <%= button_to like_path(quote.likes.find_by(user_id: current_user.id)), method: :delete do %>
-                        <button>
-                          <svg class="w-5 h-5 rounded-full fill-red-500 cursor-pointer" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-                          </svg>
-                        </button>
-                    <% end %>
-                    <p><%= quote.likes.count %> Likes</p>
-                <% else %>
-                      <%= button_to likes_path(quote), params: {like: {likeable_id: quote.id, likeable_type: quote.class.name}}, method: :post do %>
-                        <button>
-                          <svg class="w-5 h-5 rounded-full" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-                          </svg>
-                        </button>
-                      <% end %>
-                      <p><%= quote.likes.count %> Likes </p>
-                <% end %>
-            </div>
-            <div class="flex hover:text-blue-500 cursor-pointer">
-                <% if current_user.bookmarks.exists?(bookmarkable_id: quote.id ,bookmarkable_type: "Quote", user_id: current_user.id)%>
+                  </div>
+                  <div class="flex hover:text-blue-500 cursor-pointer">
+                  <%= button_to tweet_path(retweet), method: :get do %>
+                    <button>
+                      <svg class="w-5 h-5 rounded-full" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-.923 1.785A5.969 5.969 0 0 0 6 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337Z" />
+                      </svg>
+                    </button>
+                  <% end %>
+                  <% if retweet.comments.any? %>
+                    <p><%= retweet.comments.count%>Comments</p>
+                  <% else %>
+                    <p>0 Comments</p>
+                  <% end %>
+                  </div>
+                  <div class="flex hover:text-blue-500 cursor-pointer">
+                  <% if current_user.bookmarks.exists?(bookmarkable_id: retweet.id ,bookmarkable_type: "Retweet", user_id: current_user.id)%>
                     <%= button_to bookmark_path(tweet.bookmarks.find_by(user_id: current_user.id)), method: :delete do %>
                       <button>
                         <svg class="w-5 h-5 rounded-full fill-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -336,38 +211,65 @@
                         </svg>
                       </button>
                     <% end %>
-                    <p><%=tweet.bookmarks.count%> Bookmarks</p>
-                <% else %>
-                     <%= button_to bookmarks_path(quote), params: {bookmark: {bookmarkable_type: quote.class.name, bookmarkable_id: quote.id}}, method: :post do %>
+                    <p><%=retweet.bookmarks.count%> Bookmarks</p>
+                  <% else %>
+                     <%= button_to bookmarks_path(retweet), params: {bookmark: {bookmarkable_type: retweet.class.name, bookmarkable_id: retweet.id}}, method: :post do %>
                       <button>
                         <svg class="w-5 h-5 rounded-full" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
                         </svg>
                       </button>
                     <% end %>
-                    <p><%=quote.bookmarks.count%> Bookmarks</p>
-                <% end %>
-            </div>
-        </div>
-                <% if quote.likes.any? %>
-                    <div>
-                        <p><%= quote.likes.count%> Likes</p>
-                        <%= button_to "Unlike Quote", like_path(quote.likes.find_by(user_id: current_user.id)), method: :delete%>
+                    <p><%=retweet.bookmarks.count%> Bookmarks</p>
+                  <% end %>
+                  </div>
+                  <div class="flex hover:text-blue-500 cursor-pointer">
+                  <%= button_to new_quote_tweet_path(retweet), method: :get do %>
+                    <button>
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                      </svg>
+                    </button>
+                  <% end %>
+                  <p>Quote Tweet</p>
+                  </div>
+                </div>
                     </div>
-                <% else %>
-                    <%= button_to "Like Quote", likes_path(quote), params: {like: {likeable_type: quote.class.name, likeable_id: quote.id }}, method: :post %> 
-                <% end %>
-                <% if current_user.bookmarks.exists?(bookmarkable_id: quote.id,bookmarkable_type: "Quote",user_id: current_user.id) %>
-                    <%= button_to "Unbookmark Quote", bookmark_path(quote.bookmarks.find_by(user_id: current_user.id)), method: :delete %>
-                <% else %>
-                    <%= button_to "Bookmark Quote", bookmarks_path(quote), params: {bookmark: {bookmarkable_type: quote.class.name, bookmarkable_id:quote.id}}, method: :post%>
                 <% end %>
             </div>
         <% end %>
-        </div>
-    <% end %>
-    <% if user_signed_in? %>
-        <%= button_to "Log out", destroy_user_session_path, method: :delete %>
-    <% end %>
+    </div>
+    <div class="quote-tweets-section max-w-xl mx-auto bg-white p-4" >
+        <h2 class="text-xl font-bold">Quote Tweets</h2>
+        <% @profile.user.quotes.each do |quote| %>
+            <div class="flex items-start border rounded-lg mt-3">
+            <%= image_tag(@profile.profile_photo, class: "w-12 h-12 rounded-full mr-4")%>
+            <div class="flex-grow">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <span class="font-bold text-gray-900"><%= quote.user.username %></span>
+                        <span class="text-gray-500 ml-2">@<%= quote.user.username %></span>
+                        <span class="text-gray-500 ml-2"><%= quote.created_at%></span>
+                    </div>
+                </div>
+                <p class="text-gray-900 mt-2 mb-4"><b><%= quote.body %></b></p>
+                <div class="border border-gray-300 rounded-lg p-4 bg-gray-100 mb-3 mx-2">
+                    <div class="flex items-start">
+                        <%= image_tag(@profile.profile_photo, class: "w-8 h-8 rounded-full mr-4" )%>
+                        <div>
+                            <div>
+                                <span class="font-bold text-gray-900"><%= quote.tweet.user.username %></span>
+                                <span class="text-gray-500 ml-2">@<%= quote.tweet.user.username %></span>
+                                <span class="text-gray-500 ml-2"><%= quote.tweet.created_at %></span>
+                            </div>
+                            <p class="text-gray-900 mt-2"><%= quote.tweet.body %></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        <% end %>
+    </div>
 </div>
+
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_13_145713) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_04_035039) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -56,6 +56,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_13_145713) do
     t.datetime "updated_at", null: false
     t.integer "tweet_id", null: false
     t.integer "user_id", null: false
+    t.integer "retweet_id"
+    t.integer "quote_id"
+    t.index ["quote_id"], name: "index_comments_on_quote_id"
+    t.index ["retweet_id"], name: "index_comments_on_retweet_id"
     t.index ["tweet_id"], name: "index_comments_on_tweet_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
@@ -131,6 +135,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_13_145713) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "bookmarks", "users"
+  add_foreign_key "comments", "quotes"
+  add_foreign_key "comments", "retweets"
   add_foreign_key "comments", "tweets"
   add_foreign_key "comments", "users"
   add_foreign_key "likes", "users"

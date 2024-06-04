@@ -1,13 +1,15 @@
 <div>
-    <div class="border-t-2 border-b-2">
-        <h1>Details of Tweet</h1>
+    <div class="border rounded-lg">
         <p><b><%=@tweet.user.username%></b>@<%=@tweet.user.username%></p>
         <% if @tweet.user.profile.present? && @tweet.user.profile.profile_photo.attached?%>
-                <%= button_to do %>
+                <%= button_to profile_path(@tweet.user.profile), method: :get do %>
                     <%= image_tag(@tweet.user.profile.profile_photo,class: "w-10 h-10 rounded-full cursor-pointer")%>
                 <% end %>
         <% end %>
         <%= @tweet.body %>
+        <% if @tweet.user_id == current_user.id %>
+          <%= link_to "Delete Tweet", tweet_path(@tweet), method: :delete %>
+        <% end %>
         <div class="flex">
                   <div class="flex">
                     <% if current_user.likes.exists?(likeable_id: @tweet, likeable_type: @tweet.class.name)%>
@@ -92,9 +94,9 @@
                 </div>
     </div>
     <h2><b>Details of Comments above tweet</b></h2>
-    <div class="border-b-2">
+    <div class="rounded-lg">
       <% @tweet.comments.each do |comment| %>
-        <p class="border-t-2"></p>
+        <p></p>
         <p><b><%=comment.user.username%></b>@<%=comment.user.username%></p>
         <% if comment.user.profile.present? && comment.user.profile.profile_photo.attached?%>
                 <%= button_to do %>

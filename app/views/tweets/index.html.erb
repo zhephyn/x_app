@@ -1,50 +1,4 @@
 
-<body class="bg-gray-100">
-  <div class="flex">
-    <!-- Sidebar -->
-    <div class="w-1/5 bg-white h-screen p-4">
-      <div class="mb-4">
-        <a href="#" class="text-blue-500 text-2xl font-bold">Twitter</a>
-      </div>
-      <nav>
-        <ul>
-            <div class="flex items-center">
-                <%= image_tag("home-icon.svg", alt: "Home Icon", class: "w-6 h-6 pb-8")%>
-                <li class="mb-2"><a href="#" class="text-gray-700 hover:text-blue-500">Home</a></li>
-            </div>
-            <div class="flex items-center">
-                <%= image_tag("explore-icon.svg", alt: "Explore Icon", class: "w-6 h-6 pb-8")%>
-                <li class="mb-2"><a href="#" class="text-gray-700 hover:text-blue-500">Explore</a></li>
-            </div>
-            <div class="flex items-center">
-                <%= image_tag("notifications-icon.svg", alt: "Notifications Icon",class: "w-6 h-6 pb-8")%>
-                <li class="mb-2"><a href="#" class="text-gray-700 hover:text-blue-500">Notifications</a></li>
-            </div>
-            <div class="flex items-center">
-                <%= image_tag("messages-icon.svg", alt: "Messages Icon",class: "w-6 h-6 pb-8")%>
-                <li class="mb-2"><a href="#" class="text-gray-700 hover:text-blue-500">Messages</a></li>
-            </div>
-            <div class="flex items-center">
-                <%= image_tag("bookmarks-icon.svg", alt: "Bookmarks Icon", class: "w-6 h-6 pb-8")%>
-                <li class="mb-2"><a href="#" class="text-gray-700 hover:text-blue-500">Bookmarks</a></li>
-            </div>
-            <div class="flex items-center">
-                <%= image_tag("lists-icon.svg", alt: "Lists Icon", class: "w-6 h-6 pb-8")%>
-                <li class="mb-2"><a href="#" class="text-gray-700 hover:text-blue-500">Lists</a></li>
-            </div>
-            <div class="flex items-center">
-                <%= image_tag("profile-icon.svg", alt: "Profile Icon", class: "w-6 h-6 pb-8")%>
-                <li class="mb-2"><a href="#" class="text-gray-700 hover:text-blue-500">Profile</a></li>
-            </div>
-            <div class="flex items-center">
-                <%= image_tag("more-icon.svg", alt: "More Icon", class: "w-6 h-6 pb-8")%>
-                <li><a href="#" class="text-gray-700 hover:text-blue-500">More</a></li>
-            </div>
-        </ul>
-      </nav>
-      <%= button_to "Tweet", new_tweet_path, method: :get, class: "mt-4 w-full bg-blue-500 text-white py-2 rounded" %>
-    </div>
-
     <!-- Main Content -->
     <div class="flex-1 p-4">
       <div>
@@ -60,10 +14,10 @@
         </div>
         <div>
           <% @tweets.each do |tweet| %>
-              <div class="border-t-2 border-b-2">
+              <div class="border rounded-lg mt-3">
                 <p><b><%= tweet.user.username%></b>@<%= tweet.user.username %></p>
                 <% if tweet.user.profile.present? && tweet.user.profile.profile_photo.attached?%>
-                  <%= button_to do %>
+                  <%= button_to profile_path(tweet.user.profile), method: :get do %>
                     <%= image_tag(tweet.user.profile.profile_photo,class: "w-10 h-10 rounded-full cursor-pointer")%>
                   <% end %>
                 <% end %>
@@ -158,18 +112,3 @@
       </div>
     </div>
 
-    <!-- Who To Follow -->
-    <div class="w-1/4 p-4">
-      <div class="bg-white p-4 rounded-lg shadow-md">
-        <h2 class="text-lg font-bold mb-4">Who To follow</h2>
-        <ul>
-          <li class="mb-4">
-            <p class="text-gray-800">@erincodes</p>
-          </li>
-        </ul>
-        <a href="#" class="text-blue-500">Show more</a>
-      </div>
-    </div>
-  </div>
-</body>
-</html>

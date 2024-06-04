@@ -1,16 +1,37 @@
-<div>
-    <div>
-            <h1>Happening Now</h1>
-            <h2>Join Today.</h2>
-            <div>
-                <%= button_to "Sign up with Google", new_user_registration_path, method: :get %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Now</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="flex items-center justify-center min-h-screen bg-black text-white">
+    <div class="flex flex-col md:flex-row items-center">
+        <div class="mb-6 md:mb-0 md:mr-10">
+            <svg class="w-20 h-20 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </div>
+        <div>
+            <h1 class="text-4xl font-bold mb-4">Happening now</h1>
+            <h2 class="text-2xl font-semibold mb-6">Join today.</h2>
+            <div class="flex flex-col space-y-4">
+                <button class="bg-blue-500 text-white py-2 px-4 rounded-lg">Sign up with Google</button>
+                <button class="bg-black text-white py-2 px-4 rounded-lg border border-white">Sign up with Apple</button>
+                <div class="flex items-center justify-center">
+                    <span class="mx-2">or</span>
+                </div>
+                <%= button_to new_user_registration_path, method: :get do %>
+                    <button class= "bg-blue-500 text-white py-2 px-4 rounded-lg w-full">Create account</button>
+                <% end %>
             </div>
-
-            <%= button_to "Sign Up with Apple", new_user_registration_path, method: :get %>
-            <p>or</p>
-            <%= button_to "Create Account", new_user_registration_path, method: :get%>
-            <p>By Signing Up you agree to the Terms Of Service and Privacy Policy, including Cookie Use.</p>
-            <p>Already have an account?</p>
-            <%=button_to "Sign In", new_user_session_path, method: :get, class: "bg-blue-500 hover:bg-blue-700 text-black font-bold rounded" %>
+            <p class="text-sm mt-6">By signing up, you agree to the <a href="#" class="text-blue-500">Terms of Service</a> and <a href="#" class="text-blue-500">Privacy Policy</a>, including <a href="#" class="text-blue-500">Cookie Use</a>.</p>
+            <p class="text-sm mt-4">Already have an account?</p>
+            <%= link_to new_user_session_path, method: :get do %>
+                <p class="text-blue-500">Log in</p>
+            <% end %>
+        </div>
     </div>
-</div>
+</body>
+</html>

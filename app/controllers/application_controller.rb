@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
         before_action :configure_permitted_parameters, if: :devise_controller?
+        before_action :set_user_profiles
       
         protected
       
@@ -20,4 +21,15 @@ class ApplicationController < ActionController::Base
             super
           end
         end
+        private
+        def set_user_profiles
+          @profiles = Profile.all
+        end 
+        def set_tweets
+          @tweets = Tweet.all
+        end 
+
+        def display_side_bars?
+          !(controller_name == "tweets" && action_name == "home")
+        end 
 end 
