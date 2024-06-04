@@ -24,38 +24,36 @@
         <ul>
             <div class="flex items-center">
               <%= link_to tweets_path(@tweets) do %>
-                <%= image_tag("home-icon.svg", class: "w-6 h-6 pt-6")%>
+                <%= image_tag("home-icon.svg", class: "w-8 h-8")%>
                 <li class="mb-2"><a href="#" class="text-gray-700 hover:text-blue-500">Home</a></li>
               <% end %>
             </div>
             <div class="flex items-center">
-                <%= image_tag("explore-icon.svg", alt: "Explore Icon", class: "w-6 h-6 pb-3")%>
+                <%= image_tag("explore-icon.svg", alt: "Explore Icon", class: "w-6 h-6")%>
                 <li class="mb-2"><a href="#" class="text-gray-700 hover:text-blue-500">Explore</a></li>
             </div>
             <div class="flex items-center">
-                <%= image_tag("notifications-icon.svg", alt: "Notifications Icon",class: "w-6 h-6 pb-3")%>
+                <%= image_tag("notifications-icon.svg", alt: "Notifications Icon",class: "w-6 h-6")%>
                 <li class="mb-2"><a href="#" class="text-gray-700 hover:text-blue-500">Notifications</a></li>
             </div>
             <div class="flex items-center">
-                <%= image_tag("messages-icon.svg", alt: "Messages Icon",class: "w-6 h-6 pb-3")%>
+                <%= image_tag("messages-icon.svg", alt: "Messages Icon",class: "w-6 h-6")%>
                 <li class="mb-2"><a href="#" class="text-gray-700 hover:text-blue-500">Messages</a></li>
             </div>
             <div class="flex items-center">
-                <%= image_tag("bookmarks-icon.svg", alt: "Bookmarks Icon", class: "w-6 h-6 pb-3")%>
+                <%= image_tag("bookmarks-icon.svg", alt: "Bookmarks Icon", class: "w-6 h-6")%>
                 <li class="mb-2"><a href="#" class="text-gray-700 hover:text-blue-500">Bookmarks</a></li>
             </div>
             <div class="flex items-center">
-                <%= image_tag("lists-icon.svg", alt: "Lists Icon", class: "w-6 h-6 pb-3")%>
+                <%= image_tag("lists-icon.svg", alt: "Lists Icon", class: "w-6 h-6")%>
                 <li class="mb-2"><a href="#" class="text-gray-700 hover:text-blue-500">Lists</a></li>
             </div>
             <div class="flex items-center">
-              <%=link_to profile_path(current_user.profile) do %>
-                <%= image_tag("profile-icon.svg", alt: "Profile Icon", class: "w-6 h-6 pb-3")%>
+                <%= image_tag("profile-icon.svg", alt: "Profile Icon", class: "w-6 h-6")%>
                 <li class="mb-2"><a href="#" class="text-gray-700 hover:text-blue-500">Profile</a></li>
-              <% end %>
             </div>
             <div class="flex items-center">
-                <%= image_tag("more-icon.svg", alt: "More Icon", class: "w-6 h-6 pb-3")%>
+                <%= image_tag("more-icon.svg", alt: "More Icon", class: "w-6 h-6")%>
                 <li><a href="#" class="text-gray-700 hover:text-blue-500">More</a></li>
             </div>
         </ul>
